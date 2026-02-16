@@ -2,6 +2,9 @@ FROM node:20-alpine
 
 WORKDIR /app
 
+# Git é necessário para o pacote baileys
+RUN apk add --no-cache git
+
 # Instala dependências primeiro (cache de camada)
 COPY package.json yarn.lock ./
 RUN yarn install --frozen-lockfile --production && yarn cache clean
