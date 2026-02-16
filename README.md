@@ -20,6 +20,37 @@ PRINT_QR_IN_TERMINAL=false
 
 ## Instalação e execução
 
+### Opção 1 — Docker (recomendado)
+
+Basta ter [Docker](https://docs.docker.com/get-docker/) instalado:
+
+```bash
+# Subir tudo (API + MongoDB):
+docker compose up -d
+
+# Ver logs em tempo real:
+docker compose logs -f app
+
+# Parar sem perder dados:
+docker compose down
+
+# Parar E destruir volumes (sessões + banco):
+docker compose down -v
+```
+
+> **Persistência**: as sessões WhatsApp ficam no volume `sessions_data` e o MongoDB no volume `mongo_data`. Mesmo que o container seja destruído (`docker compose down`), os dados são mantidos — só são removidos com a flag `-v`.
+
+Variáveis podem ser customizadas no `.env` (o Compose as lê automaticamente):
+
+```
+PORT=3333
+PAIRING_CODE_TTL=120000
+PRINT_QR_IN_TERMINAL=false
+MONGO_PORT=27017
+```
+
+### Opção 2 — Local (sem Docker)
+
 ```bash
 yarn install
 yarn start

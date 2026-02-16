@@ -1,0 +1,31 @@
+services:
+  app:
+    build: .
+    container_name: whatsapp-api
+    restart: unless-stopped
+    ports:
+      - "${PORT:-3333}:3333"
+    environment:
+      PORT: 3333
+      MONGODB_URI: mongodb://mongo:27017/whatsapp_api
+      AUTH_FOLDER: /app/storage/sessions
+      PAIRING_CODE_TTL: ${PAIRING_CODE_TTL:-120000}
+      PRINT_QR_IN_TERMINAL: ${PRINT_QR_IN_TERMINAL:-false}
+    volumes:
+      - sessions_data:/app/storage/sessions
+    depends_on:
+      mongo:
+        condition: service_started
+
+  mongo:
+    image: mongo:7
+    container_name: whatsapp-api-mongo
+    restart: unless-stopped
+    volumes:
+      - mongo_data:/data/db
+    ports:
+      - "${MONGO_PORT:-27017}:27017"
+
+volumes:
+  sessions_data:
+  mongo_data:
