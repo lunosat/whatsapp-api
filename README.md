@@ -6,7 +6,9 @@ Projeto em Node.js que expõe uma API REST para gerenciar múltiplas conexões W
 
 - Node.js 18+
 - Yarn ou npm
-- MongoDB acessível (ex.: `mongodb://127.0.0.1:27017/whatsapp_api`)
+- Docker e Docker Compose (recomendado)
+
+> Se você usar Docker Compose, **não precisa** provisionar MongoDB separado: o `docker-compose.yml` já sobe `app` + `mongo` com volume persistente.
 
 ## Variáveis de ambiente (`.env`)
 
@@ -39,6 +41,8 @@ docker compose down -v
 ```
 
 > **Persistência**: as sessões WhatsApp ficam no volume `sessions_data` e o MongoDB no volume `mongo_data`. Mesmo que o container seja destruído (`docker compose down`), os dados são mantidos — só são removidos com a flag `-v`.
+>
+> **Ordem de subida**: a API aguarda o healthcheck do MongoDB antes de iniciar.
 
 Variáveis podem ser customizadas no `.env` (o Compose as lê automaticamente):
 
@@ -57,6 +61,8 @@ yarn start
 # modo desenvolvimento com reload automático (ignora storage/)
 yarn dev
 ```
+
+> Nesta opção local, aí sim você precisa de um MongoDB acessível e configurar `MONGODB_URI` no `.env`.
 
 O servidor sobe em `http://localhost:3333`. Um endpoint de saúde está exposto em `/health`.
 
